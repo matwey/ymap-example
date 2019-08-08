@@ -3,9 +3,19 @@
 	<head>
 		<script src="///code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script src="///api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+		<link rel="stylesheet" href="./styles.css" />
 	</head>
 	<body>
 		<div id="map" style="margin: auto; border: 1px solid black; width:1024px; height: 800px;"></div>
+
+		<div id="control">
+			<div><label>Source:</label><input id="src" value="55.734876 37.59308"/></div>
+			<div><label>Destination:</label><input id="dest" value="55.724146 37.696946"/></div>
+			<div><input type="button" id="do_route" value="Route"></input></div>
+			<div><label>Distance (m.):</label><input id="dist"/></div>
+			<div><label>Duration (sec.):</label><input id="dur"/></div>
+		</div>
 
 		<script src="./main.js"></script>
 	</body>

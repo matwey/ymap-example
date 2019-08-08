@@ -9,32 +9,44 @@ function component() {
 }
 
 $(document).ready(() => {
+	var src = $("#src");
+	var dest = $("#dest");
+	var dist = $("#dist");
+	var dur = $("#dur");
+
 	ymaps.ready(() => {
-		var multiRoute = new ymaps.multiRouter.MultiRoute({   
-			referencePoints: [
-				'Москва, метро Смоленская',
-				'Москва, метро Арбатская',
-				[55.734876, 37.59308], // улица Льва Толстого.
-			],
-			params: {
-				routingMode: "masstransit"  
-			}},
-			{
-				boundsAutoApply: true,
-			});
-
-		multiRoute.model.events.add('requestsuccess', () => {
-			var activeRoute = multiRoute.getActiveRoute();
-
-			console.log("Длина: " + activeRoute.properties.get("distance").text);
-			console.log("Время прохождения: " + activeRoute.properties.get("duration").text);
-		});
-
 		var map = new ymaps.Map('map', {
 			center: [55.76, 37.64],
 			zoom: 10
 		});
 
-		map.geoObjects.add(multiRoute);
+		$("#do_route").click(() => {
+			var src_coord = src.val().split(" ").map(parseFloat);
+			var dest_coord = dest.val().split(" ").map(parseFloat);
+
+			var multiRoute = new ymaps.multiRouter.MultiRoute({   
+				referencePoints: [src_coord, dest_coord],
+				params: {
+					routingMode: "masstransit"  
+				}},
+				{
+					boundsAutoApply: true,
+				});
+
+			multiRoute.model.events.add('requestsuccess', () => {
+				var activeRoute = multiRoute.getActiveRoute();
+
+				if (activeRoute) {
+					dist.val(activeRoute.properties.get("distance").value);
+					dur.val(activeRoute.properties.get("duration").value);
+				}
+			});
+
+			dist.val('');
+			dur.val('');
+
+			map.geoObjects.removeAll();
+			map.geoObjects.add(multiRoute);	
+		});
 	});
 });
